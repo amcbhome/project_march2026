@@ -1,69 +1,64 @@
 import streamlit as st
-import requests
-from bs4 import BeautifulSoup
 
 st.set_page_config(page_title="IFRS Explorer")
 
-SOURCE_URL = "https://www.ifrs.org/issued-standards/list-of-standards/"
-
-
-def fetch_ifrs_standards():
-
-    try:
-
-        response = requests.get(SOURCE_URL)
-        soup = BeautifulSoup(response.text, "html.parser")
-
-        standards = []
-
-        # Find all links that contain IFRS standards
-        links = soup.find_all("a")
-
-        for link in links:
-
-            text = link.get_text(strip=True)
-
-            if text.startswith("IFRS"):
-                standards.append(text)
-
-        # Remove duplicates and sort
-        standards = sorted(set(standards))
-
-        return standards
-
-    except:
-        return ["Unable to retrieve standards from IFRS website"]
-
-
-standards = fetch_ifrs_standards()
-
-
-# Sidebar
-st.sidebar.title("IFRS Standards")
-
-selected = st.sidebar.selectbox(
-    "Select a Standard",
-    standards
-)
-
-
-# Main page
 st.title("IFRS Explorer")
 
-st.write(
-"""
-This application retrieves the current list of IFRS Accounting Standards
-from the IFRS Foundation website and displays them for exploration.
-"""
-)
-
-st.subheader(selected)
-
-st.write(
-"""
-To view the full standard, consult the IFRS Foundation website.
+st.write("""
+This application lists the IFRS Accounting Standards currently issued
+by the International Accounting Standards Board (IASB).
 
 Source:
 https://www.ifrs.org/issued-standards/list-of-standards/
-"""
+""")
+
+# IFRS standards (2026)
+
+ifrs_standards = [
+
+"IFRS 1 – First-time Adoption of International Financial Reporting Standards",
+"IFRS 2 – Share-based Payment",
+"IFRS 3 – Business Combinations",
+"IFRS 4 – Insurance Contracts",
+"IFRS 5 – Non-current Assets Held for Sale and Discontinued Operations",
+"IFRS 6 – Exploration for and Evaluation of Mineral Resources",
+"IFRS 7 – Financial Instruments: Disclosures",
+"IFRS 8 – Operating Segments",
+"IFRS 9 – Financial Instruments",
+"IFRS 10 – Consolidated Financial Statements",
+"IFRS 11 – Joint Arrangements",
+"IFRS 12 – Disclosure of Interests in Other Entities",
+"IFRS 13 – Fair Value Measurement",
+"IFRS 14 – Regulatory Deferral Accounts",
+"IFRS 15 – Revenue from Contracts with Customers",
+"IFRS 16 – Leases",
+"IFRS 17 – Insurance Contracts",
+"IFRS 18 – Presentation and Disclosure in Financial Statements",
+"IFRS 19 – Subsidiaries without Public Accountability: Disclosures"
+
+]
+
+# Sidebar list
+
+st.sidebar.title("IFRS Standards")
+
+selected_standard = st.sidebar.selectbox(
+"Select IFRS Standard",
+ifrs_standards
+)
+
+# Main display
+
+st.header(selected_standard)
+
+st.write("""
+A description of this standard can be added here in a future version of the
+application.
+
+This project demonstrates a Python Streamlit interface for navigating
+IFRS Accounting Standards.
+""")
+
+st.caption(
+"Source: IFRS Foundation – List of IFRS Accounting Standards"
 )
